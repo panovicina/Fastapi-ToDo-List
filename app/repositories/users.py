@@ -40,3 +40,9 @@ class UserRepository:
         user = result.scalar()
         await self.session.delete(user)
         return user
+
+    async def get_by_username(self, username: str):
+        query = select(User).where(User.username == username)
+        result = await self.session.execute(query)
+        user = result.scalar()
+        return user

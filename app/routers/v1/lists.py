@@ -1,8 +1,9 @@
 import sqlalchemy
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
 
 from app.schemas import list as list_schema
+from app.services.auth import get_current_user
 from app.services.lists import TODOListService
 
 router = APIRouter(
@@ -27,8 +28,9 @@ async def update_list_by_id(
 @router.get(
     "/lists", response_model=list[list_schema.ListOutSchema]
 )  # достать все to do lists
-async def get_all_lists():
-    lists = await TODOListService.get_all_lists()
+async def get_all_lists(user=Depends(get_current_user)):
+    print(user)
+    lists = await TODOListService.get_by_user_id(user_id=user.id)
     if not lists:
         return JSONResponse(
             status_code=404,
@@ -49,7 +51,10 @@ async def get_lists_by_user_id(user_id: int):
 
 
 @router.post("/lists", response_model=list_schema.ListOutSchema)
-async def create_todolist(todo_list: list_schema.ListInSchema):
+async def create_todolist(
+    todo_list: list_schema.ListInSchema, user=Depends(get_current_user)
+):
+    todo_list.user_id = user.id
     try:
         list1 = await TODOListService.create_list(todo_list)
     except sqlalchemy.exc.IntegrityError:

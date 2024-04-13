@@ -32,6 +32,8 @@ class UserService:
     @staticmethod
     async def create_user(user: user_schema.UserInSchema):
         async with async_session() as session:
+            # hashed_pass = hash_pass(user.password)
+            # user.password = hashed_pass
             user = User(**user.model_dump())
             # user = User(username=user.username,
             # password=user.password)
@@ -43,5 +45,12 @@ class UserService:
     async def delete_user(id: int):
         async with async_session() as session:
             user = await UserRepository(session).delete(user_id=id)
+            await session.commit()
+        return user
+
+    @staticmethod
+    async def get_by_username(username: str):
+        async with async_session() as session:
+            user = await UserRepository(session).get_by_username(username)
             await session.commit()
         return user
