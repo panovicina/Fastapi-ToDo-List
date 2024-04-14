@@ -2,6 +2,7 @@ from app.database import async_session
 from app.models import User
 from app.repositories.users import UserRepository
 from app.schemas import user as user_schema
+from app.utils import hash_pass
 
 
 class UserService:
@@ -32,8 +33,8 @@ class UserService:
     @staticmethod
     async def create_user(user: user_schema.UserInSchema):
         async with async_session() as session:
-            # hashed_pass = hash_pass(user.password)
-            # user.password = hashed_pass
+            hashed_pass = hash_pass(user.password)
+            user.password = hashed_pass
             user = User(**user.model_dump())
             # user = User(username=user.username,
             # password=user.password)

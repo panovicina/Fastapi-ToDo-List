@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
+from app import utils
 from app.schemas.auth import Token
 from app.services.auth import create_access_token
 from app.services.users import UserService
@@ -18,9 +19,11 @@ async def login(userdetails: OAuth2PasswordRequestForm = Depends()):
             detail="The User Does not exist",
         )
 
-    # if not utils.verify_password(userdetails.password, user.password):
-    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-    #     detail="The Passwords do not match")
+    if not utils.verify_password(userdetails.password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="The Passwords do not match",
+        )
 
     access_token = create_access_token(data={"user_id": user.id})
 
