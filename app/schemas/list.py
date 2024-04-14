@@ -4,7 +4,7 @@ from pydantic import BaseModel
 class ListInSchema(BaseModel):
     name: str
     description: str | None = None
-    user_id: int
+    user_id: int | None = None
 
 
 class ListUpdateSchema(BaseModel):
