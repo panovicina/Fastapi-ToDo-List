@@ -18,7 +18,7 @@ Restfull application implemented with FastAPI that allows you to perform CRUD op
 chmod +x entrypoint.sh
 ```
 
-3) run containers
+2) run containers
 
 ```shell
 docker-compose  up
