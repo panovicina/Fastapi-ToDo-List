@@ -13,10 +13,13 @@ Restfull application implemented with FastAPI that allows you to perform CRUD op
 
 ### Quick start with docker-compose:
 1) Made entrypoint executable if needed
-'''shell
+   
+```shell
 chmod +x entrypoint.sh
-'''
-2) run containers
-'''shell
+```
+
+3) run containers
+
+```shell
 docker-compose  up
-'''
+```
